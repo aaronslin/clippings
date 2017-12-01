@@ -1,0 +1,26 @@
+.container {
+	border: 1px solid #AAA;
+	margin-left: auto;
+	margin-right: auto;
+	width: 800px;
+}
+
+#imgContainer {
+	margin-bottom: 20px;
+}
+
+#screenshot {
+	width: 800px;
+	display: block;
+	margin-right: auto;
+	margin-left: auto;
+	max-height: 500px;
+}
+
+#commentBox {
+	width: 100%;
+	padding-left: 20px;
+	padding-right: 20px;
+	font-size: 20px;
+	height: 60px;
+}
