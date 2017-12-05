@@ -20,15 +20,26 @@ Allow the user to crop the image
 */
 
 var DEFAULT_FORMAT = "png";
-var DEFAULT_PATH = "clip_images/";
+var DEFAULT_PATH = "./json_test/";
 var DEFAULT_FILENAME = "test.png"
 var id = 100;
 
+function downloadData(dataURL, filename) { 
+	chrome.downloads.download({
+		url: dataURL,
+		filename: DEFAULT_PATH + filename,
+		conflictAction: "uniquify"
+	});
+}
+chrome.runtime.onMessage.addListener(function(msg, sender) {
+	if ((msg.action === 'downloadData')
+			&& (msg.dataURL !== undefined)) {
+		downloadData(msg.dataURL, msg.filename);
+	}
+});
+
 // Listen for a click on the camera icon. On that click, take a screenshot.
 chrome.browserAction.onClicked.addListener(function(homeTab) {
-	// URL for tab from which the browserAction was clicked
-	tabUrl = homeTab.url;
-
 	chrome.tabs.captureVisibleTab(null, {"format": DEFAULT_FORMAT}, function(screenshotUrl) {
 		var viewTabUrl = chrome.extension.getURL('screenshot.html?id=' + id++);
 		var targetId = null;
@@ -54,8 +65,7 @@ chrome.browserAction.onClicked.addListener(function(homeTab) {
 				var view = views[i];
 				if (view.location.href == viewTabUrl) {
 					view.setScreenshotUrl(screenshotUrl);
-					view.setImageEncoding(screenshotUrl);
-					view.setTabUrl(tabUrl);
+					view.setTabInformation(homeTab);
 					view.setDownloadCount();
 					break;
 				}

@@ -4,29 +4,26 @@
 
 /* HTML populated by background.js */
 
-function setImageEncoding(imgUrl) {
+function setTabInformation(homeTab) {
+	document.getElementById("tabUrl").value = homeTab.url;
+	document.getElementById("tabTitle").value = homeTab.title;
+}
+
+function setScreenshotUrl(imgUrl) {
 	var prefix = "base64,";
 	var num_slice = imgUrl.indexOf(prefix) + prefix.length;
 	var base64 = imgUrl.slice(num_slice);
 
 	document.getElementById("imgEncoding").value = base64;
-}
-
-function setTabUrl(tabUrl) {
-	document.getElementById("tabUrl").value = tabUrl;
-}
-
-function setScreenshotUrl(imgUrl) {
 	document.getElementById("screenshot").src = imgUrl;
 }
 
 function setDownloadCount() {
-	el = document.getElementById("downloadCount");
+	var el = document.getElementById("downloadCount");
 	var store = chrome.storage.local;
-	var today = getToday();
+	var today = _getToday();
 
 	store.get("today", function(dateObj) {
-		console.log("date", dateObj);
 		if(dateObj["today"] == today) {
 			store.get("count", function(countObj) {
 				count = countObj["count"] + 1;
@@ -44,50 +41,64 @@ function setDownloadCount() {
 
 /* Helper functions */
 
-function zeroPad(num, places) {
+function _zeroPad(num, places) {
 	var zero = places - num.toString().length + 1;
 	return Array(+(zero > 0 && zero)).join("0") + num;
 }
 
-function getToday() {
+function _getToday() {
 	var d = new Date;
 	var dash = "-";
 	var yyyy = d.getFullYear();
-	var mm = zeroPad(d.getMonth() + 1, 2);
-	var dd = zeroPad(d.getDate(), 2);
+	var mm = _zeroPad(d.getMonth() + 1, 2);
+	var dd = _zeroPad(d.getDate(), 2);
 	return [yyyy, mm, dd].join(dash);
 }
 
-function getFileName() {
-	var today = getToday();
+function _getFileName() {
+	var today = _getToday();
 	var suffix = "clipping";
 	var clipNum = document.getElementById("downloadCount").value;
 	var dash = "-";
-	return [today, suffix, clipNum.toString()].join(dash);
+	return [today, suffix, clipNum.toString()].join(dash) + ".json";
 }
 
-function downloadData(formData) {
+function sendDownloadMessage(formData) {
 	var data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(formData));
 
-	var a = document.createElement("a");
-	a.href = "data:" + data;
-	a.download = getFileName() + ".json";
-	a.click();
+	chrome.runtime.sendMessage({
+		action: 'downloadData',
+		dataURL: "data:" + data , 
+		filename: _getFileName()
+	});
 }
 
 window.onload = function() {
 	document.getElementById("commentBox").focus();
-	
+
+	// document.getElementById("commentBox").addEventListener("keypress", function (e) {
+	// 	// Remap ENTER to submit
+	// 	console.log(e);
+	// 	if(e.which == 13 && !e.shiftKey) {        
+	// 		document.getElementById("submitButton").click();
+	// 		e.preventDefault();
+	// 		return false;
+	// 	}
+	// });
+
 	document.getElementById("dataForm").addEventListener("submit", function (e) {
 		e.preventDefault();
 
 		// There is a better jQuery method for serializing object
-		var keys = ["tabUrl", "imgEncoding", "commentBox"]
+		var keys = ["tabUrl", "tabTitle", "imgEncoding", "commentBox"]
 		var formData = {};
 		for (var i=0; i<keys.length; i++) {
 			element = document.getElementById(keys[i]);
 			formData[keys[i]] = element.value;
 		}
+		sendDownloadMessage(formData);
+		return;
+
 		downloadData(formData);
 	});
 }
