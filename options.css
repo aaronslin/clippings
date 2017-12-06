@@ -1,0 +1,58 @@
+body {
+	background-color: gray;
+	margin: 0px;
+	font-size: 16px;
+}
+
+#main {
+	width: 60%;
+	margin-right: auto;
+	margin-left: auto;
+	background-color: white;
+	padding: 50px;
+	padding-left: 50px;
+	padding-right: 50px;
+	border: 1px solid black;
+	border-top: none;
+}
+
+button, input {
+	border-radius: 4px;
+	height: 30px;
+	border: 1px solid #888;
+	font-size: 16px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+#dlFolder {
+	font-family: Monaco, Courier;
+	width: 30%;
+}
+
+#saveButton {
+	height: 34px;
+}
+
+#optionsForm {
+	margin-top: 30px;
+}
+
+.optionName {
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.optionDesc {
+	font-size: 14px;
+	color: #888;
+}
+
+#savedMsg {
+	display: none; 
+}
+
+#status {
+	height: 20px;
+}
+

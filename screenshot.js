@@ -28,15 +28,35 @@ function setDownloadCount() {
 			store.get("count", function(countObj) {
 				count = countObj["count"] + 1;
 				store.set({"count": count});
-				el.value = count.toString();
+				setFileName(count);
 			});
 		} else {
 			var count = 0;
 			store.set({"today": today});
 			store.set({"count": count});
-			el.value = count.toString();
+			setFileName(count);
 		}
 	});
+}
+
+function setFileName(clipNum) {
+	var today = _getToday();
+	var suffix = "clipping";
+	var dash = "-";
+	var filename = [today, suffix, clipNum.toString()].join(dash) + ".json";
+	document.getElementById("savefileName").value = filename;
+	setSaveAddress();
+}
+
+function setSaveAddress() {
+	var rootFolder = "[Downloads]/";
+	var fn = document.getElementById("savefileName").value;
+
+	chrome.storage.local.get("dlFolder", function(obj) {
+		console.log(obj);
+		subfolder = obj["dlFolder"];
+		document.getElementById("saveAddress").innerHTML = rootFolder + subfolder + fn;
+	})
 }
 
 /* Helper functions */
@@ -55,21 +75,22 @@ function _getToday() {
 	return [yyyy, mm, dd].join(dash);
 }
 
-function _getFileName() {
-	var today = _getToday();
-	var suffix = "clipping";
-	var clipNum = document.getElementById("downloadCount").value;
-	var dash = "-";
-	return [today, suffix, clipNum.toString()].join(dash) + ".json";
-}
+// function _getFileName() {
+// 	var today = _getToday();
+// 	var suffix = "clipping";
+// 	var clipNum = document.getElementById("downloadCount").value;
+// 	var dash = "-";
+// 	return [today, suffix, clipNum.toString()].join(dash) + ".json";
+// }
 
 function sendDownloadMessage(formData) {
 	var data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(formData));
+	var fn = document.getElementById("savefileName").value;
 
 	chrome.runtime.sendMessage({
 		action: 'downloadData',
-		dataURL: "data:" + data , 
-		filename: _getFileName()
+		dataURL: "data:" + data, 
+		filename: fn
 	});
 }
 
@@ -97,9 +118,6 @@ window.onload = function() {
 			formData[keys[i]] = element.value;
 		}
 		sendDownloadMessage(formData);
-		return;
-
-		downloadData(formData);
 	});
 }
 

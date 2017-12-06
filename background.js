@@ -1,34 +1,27 @@
 /*
 
 Todo:
-- Open image in new HTML
-- Add a textbox to insert comments
-- Upon [Enter]/[Submit]:
-	- Update chrome.storage with URL, comments, data URL
-	- Use base64 encoding => put this in the json
-- Make the default filename a timestamp
+- Settings page to set default download path
+- Add a shortcut for using this chrome extension
+- include timestamp on manifest
+- html showing title of extension
+- design stuff generally
 
-
-- Settings page to set default stuff
-
-
-Potential for many URLs to be broken if the a folder name ever changes
-
-Create a subfolder? But chrome extensions can't do this.
 Allow the user to crop the image
 
 */
 
-var DEFAULT_FORMAT = "png";
-var DEFAULT_PATH = "./json_test/";
-var DEFAULT_FILENAME = "test.png"
-var id = 100;
+var DEFAULT_FORMAT = "png"
 
 function downloadData(dataURL, filename) { 
-	chrome.downloads.download({
-		url: dataURL,
-		filename: DEFAULT_PATH + filename,
-		conflictAction: "uniquify"
+	chrome.storage.local.get("dlFolder", function(obj) {
+		dlFolder = obj["dlFolder"];
+		chrome.downloads.download({
+			url: dataURL,
+			filename: dlFolder + filename,
+			conflictAction: "uniquify",
+			saveAs: false
+		});
 	});
 }
 chrome.runtime.onMessage.addListener(function(msg, sender) {
@@ -41,7 +34,7 @@ chrome.runtime.onMessage.addListener(function(msg, sender) {
 // Listen for a click on the camera icon. On that click, take a screenshot.
 chrome.browserAction.onClicked.addListener(function(homeTab) {
 	chrome.tabs.captureVisibleTab(null, {"format": DEFAULT_FORMAT}, function(screenshotUrl) {
-		var viewTabUrl = chrome.extension.getURL('screenshot.html?id=' + id++);
+		var viewTabUrl = chrome.extension.getURL('screenshot.html');
 		var targetId = null;
 
 		chrome.tabs.onUpdated.addListener(function listener(tabId, changedProps) {
