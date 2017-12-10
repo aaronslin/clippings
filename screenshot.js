@@ -10,11 +10,7 @@ function setTabInformation(homeTab) {
 }
 
 function setScreenshotUrl(imgUrl) {
-	var prefix = "base64,";
-	var num_slice = imgUrl.indexOf(prefix) + prefix.length;
-	var base64 = imgUrl.slice(num_slice);
-
-	document.getElementById("imgEncoding").value = base64;
+	document.getElementById("imgEncoding").value = imgUrl;
 	document.getElementById("screenshot").src = imgUrl;
 }
 
