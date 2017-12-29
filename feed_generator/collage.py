@@ -14,16 +14,19 @@ configurable parameters:
 
 """
 
-FOLDER_CURRENT = "./clippings/current"
-FOLDER_QUEUE = "./clippings/queue"
+FOLDER_CURRENT = "/Users/aaronlin/Dropbox/Blog/clippings/current"
+FOLDER_QUEUE = "/Users/aaronlin/Dropbox/Blog/clippings/queue"
+FOLDER_OUT = "/Users/aaronlin/Dropbox/Blog/clippings/"
 MAX_CLIPPINGS = 100
 
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-i", "--inFolder", default=FOLDER_CURRENT)
+parser.add_argument("-o", "--outFolder", default=FOLDER_OUT)
 parser.add_argument("-n", "--numClippings", default=MAX_CLIPPINGS, type=int)
 args = parser.parse_args()
 inFolder = args.inFolder
+outFolder = args.outFolder
 numClippings = args.numClippings
 
 
@@ -88,6 +91,8 @@ def build_template(templateFile, clipping):
 	return text
 
 def build_HTML(inFolder, wrapperFile, templateFile, outFile, optionalCondition=None):
+	outFile = os.path.join(outFolder, outFile)
+	print outFile
 	wrapper, wrapPH = read_template(wrapperFile)
 	assert len(wrapPH) == 1
 	wrapPH = wrapPH[0]
