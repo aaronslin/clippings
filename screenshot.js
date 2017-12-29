@@ -18,6 +18,7 @@ function setDownloadCount() {
 	var el = document.getElementById("downloadCount");
 	var store = chrome.storage.local;
 	var today = _getToday();
+	document.getElementById("clipDate").value = today;
 
 	store.get("today", function(dateObj) {
 		if(dateObj["today"] == today) {
@@ -49,7 +50,6 @@ function setSaveAddress() {
 	var fn = document.getElementById("savefileName").value;
 
 	chrome.storage.local.get("dlFolder", function(obj) {
-		console.log(obj);
 		subfolder = obj["dlFolder"];
 		document.getElementById("saveAddress").innerHTML = rootFolder + subfolder + fn;
 	})
@@ -107,7 +107,7 @@ window.onload = function() {
 		e.preventDefault();
 
 		// There is a better jQuery method for serializing object
-		var keys = ["tabUrl", "tabTitle", "imgEncoding", "commentBox"]
+		var keys = ["tabUrl", "tabTitle", "imgEncoding", "commentBox", "clipDate"]
 		var formData = {};
 		for (var i=0; i<keys.length; i++) {
 			element = document.getElementById(keys[i]);

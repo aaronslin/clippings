@@ -1,11 +1,17 @@
 /*
 
 Todo:
-- Settings page to set default download path
+
+X Settings page to set default download path
 - Add a shortcut for using this chrome extension
-- include timestamp on manifest
-- html showing title of extension
+- include timestamp on .json file
+- html showing title of extension on options/landing pages
 - design stuff generally
+- Bug when you have multiple screenshot.html windows open.
+- Close window after downloading
+- Options page should be linked in the landing page
+- Write something to listen for file updates in the clippings/ directory
+- 
 
 Allow the user to crop the image
 
