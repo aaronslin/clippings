@@ -17,7 +17,19 @@ Allow the user to crop the image
 
 */
 
-var DEFAULT_FORMAT = "png"
+var DEFAULT_FORMAT = "png";
+var DEFAULT_SUBFOLDER = "clippings/";
+
+function defaultPopulateFolder() {
+	chrome.storage.local.get("dlFolder", function(obj) {
+		dlFolder = obj["dlFolder"];
+		if(dlFolder!==0 && !dlFolder) {
+			chrome.storage.local.set({
+				dlFolder: DEFAULT_SUBFOLDER
+			});
+		} 
+	});
+}
 
 function downloadData(dataURL, filename) { 
 	chrome.storage.local.get("dlFolder", function(obj) {
@@ -36,6 +48,8 @@ chrome.runtime.onMessage.addListener(function(msg, sender) {
 		downloadData(msg.dataURL, msg.filename);
 	}
 });
+
+defaultPopulateFolder();
 
 // Listen for a click on the camera icon. On that click, take a screenshot.
 chrome.browserAction.onClicked.addListener(function(homeTab) {

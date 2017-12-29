@@ -1,4 +1,3 @@
-DEFAULT_SUBFOLDER = "clippings/";
 PREV_SUBFOLDER = undefined;
 
 function clean_folderName(folderName) {
@@ -40,14 +39,7 @@ function capture_options(response) {
 function populate_settings() {
 	if (PREV_SUBFOLDER === undefined) {
 		chrome.storage.local.get("dlFolder", function(obj) {
-			dlFolder = obj["dlFolder"];
-			if(dlFolder!==0 && !dlFolder) {
-				document.getElementById("dlFolder").value = DEFAULT_SUBFOLDER;
-				save_options();
-			} 
-			else {
-				document.getElementById("dlFolder").value = dlFolder;
-			}
+			document.getElementById("dlFolder").value = obj["dlFolder"];
 		});
 	}
 	else {
