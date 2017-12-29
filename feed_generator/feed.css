@@ -1,0 +1,70 @@
+
+/* Wrapper CSS */
+
+body {
+	font-family: Palatino, Garamond;
+	background-color: #CCC;
+}
+
+a:link, a:visited, a:active, a:hover {
+	color: #A62F2F;
+	text-decoration: none;
+}
+
+#container {
+	margin-left: auto;
+	margin-right: auto;
+	width: 1000px;
+	border: 1px solid #AAA;
+	background-color: #FDFEF6;
+	padding: 20px;
+}
+
+#header {
+	margin: 30 auto;
+	width: 90%;
+}
+
+
+/* Template CSS */
+
+.clipping {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+.clipImg {
+	width: 900px;
+	border: 1px solid black;
+}
+
+.clipDate {
+	color: #888;
+	float: right;
+	font-family: Monaco;
+	font-size: 10pt;
+	height: 24px;
+	line-height: 24px;
+}
+
+.clipImgDiv,
+.clipText {
+	display: table;
+	margin: 0 auto;
+	width: 90%;
+}
+
+.clipText {
+	margin-top: 10px;
+}
+
+.clipTitleUrl {
+	font-size: 24px;
+}
+
+.delimiter {
+	margin: 0 auto;
+	width: 90%;
+}
+
+
